@@ -33,13 +33,13 @@ const MyApp = (props: MyAppProps) => {
           <CacheProvider value={emotionCache}>
             <Head>
               <link rel="icon" href="/logo/icon2.png" />
-              <title>Jawpaya</title>
+              <title>1st Army Area Admin</title>
               <meta
                 name="viewport"
                 content="initial-scale=1, width=device-width"
               />
-              <meta name="description" content="Jawpaya" />
-              <meta property="og:description" content="Jawpaya" />
+              <meta name="description" content="1st Army Area Admin" />
+              <meta property="og:description" content="1st Army Area Admin" />
               <meta property="og:image" content="../../public/logo/icon2.png" />
               <link rel="shortcut icon" href="/logo/icon2.png" />
               <link

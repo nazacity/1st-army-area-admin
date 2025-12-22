@@ -38,7 +38,10 @@ const UserContainer: React.FC<IProps> = ({}) => {
 
   useEffect(() => {
     if (userData) {
-      setData(userData.data);
+      const addedIndex = userData.data.map((item, index) => {
+        return { index, ...item };
+      });
+      setData(addedIndex);
       setTotal(userData.meta.total);
       setTimeout(() => {
         setLoading(false);
@@ -76,7 +79,7 @@ const UserContainer: React.FC<IProps> = ({}) => {
       headerName: t('common:table.image'),
       sortable: false,
       disableColumnMenu: true,
-      flex: 1,
+      width: 100,
       renderCell: (params) => {
         return (
           <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>

@@ -162,11 +162,11 @@ const SideBar = () => {
       </IconFixed>
       <Drawer anchor="left" variant="permanent" open={sideBarOpen}>
         <Box sx={{ flex: 1 }}>
-          <Box sx={{ py: 2, display: 'flex' }}>
+          <Box sx={{ py: 2, display: 'flex', justifyContent: 'center' }}>
             <img
               src="/logo/logo2.png"
               alt="keenix-logo"
-              style={{ width: 160 }}
+              style={{ width: 100 }}
             />
           </Box>
           <List>
@@ -208,26 +208,6 @@ const SideBar = () => {
         </Box>
         <Box>
           <List>
-            <ListItem
-              disablePadding
-              onClick={() => {
-                router.push('/account');
-              }}
-            >
-              <ListItemButton
-                disableRipple
-                sx={{
-                  '&:hover': {
-                    backgroundColor: COLORS.background.blue_light,
-                  },
-                }}
-              >
-                <ListItemIcon>
-                  <AccountCircleIcon />
-                </ListItemIcon>
-                <ListItemText primary={t('common:side_bar.account')} />
-              </ListItemButton>
-            </ListItem>
             <ListItem
               disablePadding
               onClick={() => {
