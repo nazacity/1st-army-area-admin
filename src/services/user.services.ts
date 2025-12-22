@@ -48,6 +48,65 @@ const userServices = {
       },
     });
   },
+  useQueryGetUserScoreHistoriesByUserId({
+    userId,
+    startDate,
+    endDate,
+    page,
+    take,
+  }: {
+    userId: string;
+    startDate: string;
+    endDate: string;
+    page: number;
+    take: number;
+  }) {
+    return useQuery<
+      ResponseModel<IUser[]>,
+      Error,
+      ResponseModel<IUser[]>,
+      [
+        string,
+        {
+          userId: string;
+          startDate: string;
+          endDate: string;
+          page: number;
+          take: number;
+        },
+      ]
+    >({
+      queryKey: [
+        'get-user-score-histories-by-user-id',
+        { userId, startDate, endDate, page, take },
+      ],
+      queryFn: async ({ queryKey }) => {
+        try {
+          const res = await authenticatedRequest.get(
+            `/user-score-history/${queryKey[1].userId}/user`,
+            {
+              params: {
+                page: queryKey[1].page,
+                take: queryKey[1].take,
+                ...(queryKey[1].startDate &&
+                  queryKey[1].endDate && {
+                    startDate: queryKey[1].startDate,
+                    endDate: queryKey[1].endDate,
+                  }),
+              },
+            }
+          );
+          if (res?.data) {
+            return res?.data;
+          } else {
+            return [];
+          }
+        } catch (error) {
+          throw error;
+        }
+      },
+    });
+  },
 };
 
 export default userServices;

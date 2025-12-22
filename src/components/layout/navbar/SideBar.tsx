@@ -146,7 +146,7 @@ const SideBar = () => {
           width: 40,
           height: 40,
           bgcolor: '#fff',
-          zIndex: 10000,
+          zIndex: 2000,
           boxShadow: SHADOW[3],
           borderRadius: 20,
           cursor: 'pointer',
@@ -166,7 +166,7 @@ const SideBar = () => {
             <img
               src="/logo/logo2.png"
               alt="keenix-logo"
-              style={{ width: 100 }}
+              style={{ width: '80%' }}
             />
           </Box>
           <List>

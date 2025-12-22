@@ -13,6 +13,8 @@ import BaseTable from 'components/basecomponents/basetable/BaseTable';
 import BasePagination from 'components/basecomponents/baspagination/BasePagination';
 import userServices from 'services/user.services';
 import { IUser } from 'models/user.model';
+import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 
 interface IProps {}
 
@@ -20,6 +22,7 @@ const tableSize = 10;
 
 const UserContainer: React.FC<IProps> = ({}) => {
   const { t } = useTranslation();
+  const router = useRouter();
 
   const { page, setPage, total, setTotal, loading, setLoading, data, setData } =
     usePaginationHook();
@@ -39,7 +42,7 @@ const UserContainer: React.FC<IProps> = ({}) => {
   useEffect(() => {
     if (userData) {
       const addedIndex = userData.data.map((item, index) => {
-        return { index, ...item };
+        return { ...item, index };
       });
       setData(addedIndex);
       setTotal(userData.meta.total);
@@ -66,9 +69,7 @@ const UserContainer: React.FC<IProps> = ({}) => {
           }}
         >
           <Typography>
-            {params.row.index
-              ? (page - 1) * tableSize + params.row.index + 1
-              : 1}
+            {(page - 1) * tableSize + params.row.index + 1}
           </Typography>
         </Box>
       ),
@@ -80,9 +81,17 @@ const UserContainer: React.FC<IProps> = ({}) => {
       sortable: false,
       disableColumnMenu: true,
       width: 100,
+      headerAlign: 'center',
       renderCell: (params) => {
         return (
-          <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+            }}
+          >
             <img
               src={params.row.profileImageUrl}
               alt={params.row.displayName}
@@ -116,8 +125,32 @@ const UserContainer: React.FC<IProps> = ({}) => {
       width: 180,
     },
     {
+      field: 'createdAt',
+      headerName: t('common:table.created_at'),
+      sortable: false,
+      disableColumnMenu: true,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params: GridRenderCellParams<IUser>) => (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+          }}
+        >
+          <Typography align="center" sx={{ width: '100%' }}>
+            {dayjs(params.row.createdAt).format('DD MMM BBBB')}
+          </Typography>
+        </Box>
+      ),
+      width: 180,
+    },
+    {
       field: 'actions',
       type: 'actions',
+      flex: 1,
       getActions: (params) => [
         // <GridActionsCellItem
         //   icon={<EditIcon />}
@@ -134,10 +167,11 @@ const UserContainer: React.FC<IProps> = ({}) => {
       ],
     },
   ];
+
   return (
     <Paper sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
-        <Typography variant="h2">{t('common:customers.customer')}</Typography>
+        <Typography variant="h2">{t('common:user.user')}</Typography>
         <Box sx={{ flex: 1 }} />
       </Box>
       <Box sx={{ height: 110 + 52 * tableSize }}>
@@ -156,6 +190,9 @@ const UserContainer: React.FC<IProps> = ({}) => {
                 }}
               />
             ),
+          }}
+          onRowClick={(params) => {
+            router.push(`user/${params.row.id}`);
           }}
         />
       </Box>

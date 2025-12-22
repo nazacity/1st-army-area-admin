@@ -20,7 +20,7 @@ export enum EUserBase {
 }
 
 export interface IUser {
-  index?: number;
+  index: number;
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -45,6 +45,7 @@ export interface IUserScoreInfo {
 }
 
 export interface IUserScoreHistory {
+  index: number;
   id: string;
   createdAt: string;
   updatedAt: string;
