@@ -19,6 +19,8 @@ import numeral from 'numeral';
 import { RiFilePaper2Fill } from 'react-icons/ri';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
+import { AlertConfirm } from 'utils/Alert';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IProps {}
 
@@ -27,6 +29,8 @@ const tableSize = 10;
 const UserIdContainer: React.FC<IProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { page, setPage, total, setTotal, loading, setLoading, data, setData } =
     usePaginationHook();
 
@@ -58,6 +62,14 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
       }, 600);
     }
   }, [historyData]);
+
+  const { mutate: deleteUserScoreHistory } =
+    userServices.useMutationDeleteUserScoreHistory(() => {
+      queryClient.invalidateQueries({
+        queryKey: ['get-user-score-histories-by-user-id'],
+        refetchType: 'all',
+      });
+    });
 
   const columns: GridColDef<IUserScoreHistory>[] = [
     {
@@ -196,7 +208,11 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
         // />,
         <GridActionsCellItem
           icon={<DeleteIcon />}
-          onClick={() => {}}
+          onClick={async () => {
+            const confirm = await AlertConfirm('ลบผลบันทึกของผู้ใช้งาน');
+            if (confirm)
+              deleteUserScoreHistory({ userScoreHistoryId: params.row.id });
+          }}
           label="Delete"
         />,
       ],

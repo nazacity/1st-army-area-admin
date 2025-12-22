@@ -15,6 +15,8 @@ import userServices from 'services/user.services';
 import { IUser } from 'models/user.model';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
+import { useQueryClient } from '@tanstack/react-query';
+import { AlertConfirm } from 'utils/Alert';
 
 interface IProps {}
 
@@ -23,6 +25,7 @@ const tableSize = 10;
 const UserContainer: React.FC<IProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { page, setPage, total, setTotal, loading, setLoading, data, setData } =
     usePaginationHook();
@@ -51,6 +54,13 @@ const UserContainer: React.FC<IProps> = ({}) => {
       }, 600);
     }
   }, [userData]);
+
+  const { mutate: deleteUser } = userServices.useMutationDeleteUser(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['get-users'],
+      refetchType: 'all',
+    });
+  });
 
   const columns: GridColDef<IUser>[] = [
     {
@@ -161,7 +171,10 @@ const UserContainer: React.FC<IProps> = ({}) => {
         // />,
         <GridActionsCellItem
           icon={<DeleteIcon />}
-          onClick={() => {}}
+          onClick={async () => {
+            const confirm = await AlertConfirm('ลบผู้ใช้งาน');
+            if (confirm) deleteUser({ userId: params.row.id });
+          }}
           label="Delete"
         />,
       ],

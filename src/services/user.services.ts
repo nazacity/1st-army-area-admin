@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ResponseModel } from 'models/respone.model';
 import { IUser } from 'models/user.model';
 
@@ -105,6 +105,48 @@ const userServices = {
           throw error;
         }
       },
+    });
+  },
+  useMutationDeleteUser(onSuccess: (data: string) => void) {
+    return useMutation<
+      string,
+      Error,
+      {
+        userId: string;
+      }
+    >({
+      mutationFn: async ({ userId }) => {
+        try {
+          const res = await authenticatedRequest.delete(`/user/${userId}`);
+
+          return res.data.data;
+        } catch (error) {
+          throw error.response.data.message;
+        }
+      },
+      onSuccess,
+    });
+  },
+  useMutationDeleteUserScoreHistory(onSuccess: (data: string) => void) {
+    return useMutation<
+      string,
+      Error,
+      {
+        userScoreHistoryId: string;
+      }
+    >({
+      mutationFn: async ({ userScoreHistoryId }) => {
+        try {
+          const res = await authenticatedRequest.delete(
+            `/user-score-history/${userScoreHistoryId}`
+          );
+
+          return res.data.data;
+        } catch (error) {
+          throw error.response.data.message;
+        }
+      },
+      onSuccess,
     });
   },
 };
