@@ -35,11 +35,11 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { RiFilePaper2Fill } from 'react-icons/ri';
 import { useQueryClient } from '@tanstack/react-query';
 import BaseTextInput from 'components/basecomponents/baseinput/BaseTextInput';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { COLORS } from 'theme';
+import 'react-photo-view/dist/react-photo-view.css';
 
 interface IProps {}
 
