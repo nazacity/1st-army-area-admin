@@ -1,7 +1,6 @@
-import { ClinicAdministorPermissionSectionName } from 'models/permission.model';
-import { IUser } from 'models/admin.model';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import request from './request';
+import { IUser } from 'models/user.model';
 
 const verifyUser = async (accessToken: string) => {
   try {

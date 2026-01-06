@@ -7,18 +7,9 @@ import { IUser } from 'models/admin.model';
 import { setUser } from 'store/slices/userSlice';
 import { useAppDispatch } from 'store';
 
-interface IProps {
-  user: IUser;
-}
+interface IProps {}
 
-const HomePage: React.FC<IProps> = ({ user }) => {
-  const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(setUser(user));
-  }, [user]);
-
+const HomePage: React.FC<IProps> = () => {
   return (
     <Box
       sx={{
@@ -31,8 +22,8 @@ const HomePage: React.FC<IProps> = ({ user }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return AuthGuardRedirect(ctx);
-};
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   return AuthGuardRedirect(ctx);
+// };
 
 export default HomePage;
