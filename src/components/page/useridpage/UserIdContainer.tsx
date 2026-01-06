@@ -17,7 +17,6 @@ import dayjs from 'dayjs';
 import numeral from 'numeral';
 import { RiFilePaper2Fill } from 'react-icons/ri';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'react-photo-view/dist/react-photo-view.css';
 import { AlertConfirm } from 'utils/Alert';
 import { useQueryClient } from '@tanstack/react-query';
 import CheckIcon from '@mui/icons-material/Check';

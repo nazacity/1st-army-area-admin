@@ -39,7 +39,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { COLORS } from 'theme';
-import 'react-photo-view/dist/react-photo-view.css';
 
 interface IProps {}
 

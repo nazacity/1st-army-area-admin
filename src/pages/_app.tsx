@@ -14,6 +14,7 @@ import PageContainer from 'components/layout/container/PageContainer';
 import LayoutSnackbar from 'components/layout/snackbar/LayoutSnackbar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'utils/dayjsUtil';
+import 'react-photo-view/dist/react-photo-view.css';
 
 const queryClient = new QueryClient();
 
