@@ -1,30 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import { AuthGuardRedirect } from 'utils/authGuard';
 import { GetServerSideProps } from 'next';
-import { IUser } from 'models/admin.model';
-import { setUser } from 'store/slices/userSlice';
-import HistoryCotainer from 'components/page/history/HistoryCotainer';
-import { useAppDispatch } from 'store';
+import HistoryContainer from 'components/page/history/HistoryContainer';
 
-interface IProps {
-  user: IUser;
-}
+interface IProps {}
 
-const HistoryPage: React.FC<IProps> = ({ user }) => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(setUser(user));
-  }, [user]);
-
+const HistoryPage: React.FC<IProps> = () => {
   return (
     <Box
       sx={{
         p: 4,
       }}
     >
-      <HistoryCotainer />
+      <HistoryContainer />
     </Box>
   );
 };

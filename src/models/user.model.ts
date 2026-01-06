@@ -17,6 +17,7 @@ export enum EUserBase {
   'กกร.ทภ.1' = 'กกร.ทภ.1',
   'ร้อย.บก.ทภ.1' = 'ร้อย.บก.ทภ.1',
   'ร้อย.ปจว.ทภ.1' = 'ร้อย.ปจว.ทภ.1',
+  '' = '',
 }
 
 export interface IUser {
@@ -44,6 +45,12 @@ export interface IUserScoreInfo {
   user: IUser;
 }
 
+export enum EUserScoreHistoryStatus {
+  'approved' = 'approved',
+  'pending' = 'pending',
+  'rejected' = 'rejected',
+}
+
 export interface IUserScoreHistory {
   index: number;
   id: string;
@@ -54,4 +61,5 @@ export interface IUserScoreHistory {
   time: number;
   distance: number;
   imageUrl: string;
+  status: EUserScoreHistoryStatus;
 }

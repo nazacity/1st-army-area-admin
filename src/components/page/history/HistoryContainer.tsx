@@ -1,56 +1,57 @@
 import React, { useEffect } from 'react';
-import useTranslation from 'next-translate/useTranslation';
-import userServices from 'services/user.services';
-import { useRouter } from 'next/router';
-import usePaginationHook from 'utils/usePaginationHook';
+import historyServices from 'services/history.services';
 import { useForm } from 'react-hook-form';
+import usePaginationHook from 'utils/usePaginationHook';
+import {
+  EUserBase,
+  EUserScoreHistoryStatus,
+  IUserScoreHistory,
+} from 'models/user.model';
 import { Avatar, Box, Paper, Typography } from '@mui/material';
 import BaseTable from 'components/basecomponents/basetable/BaseTable';
 import BasePagination from 'components/basecomponents/baspagination/BasePagination';
-import { EUserScoreHistoryStatus, IUserScoreHistory } from 'models/user.model';
 import {
   GridActionsCellItem,
   GridColDef,
   GridRenderCellParams,
 } from '@mui/x-data-grid';
-import dayjs from 'dayjs';
-import numeral from 'numeral';
-import { RiFilePaper2Fill } from 'react-icons/ri';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'react-photo-view/dist/react-photo-view.css';
 import { AlertConfirm } from 'utils/Alert';
-import { useQueryClient } from '@tanstack/react-query';
 import CheckIcon from '@mui/icons-material/Check';
+import dayjs from 'dayjs';
 import CloseIcon from '@mui/icons-material/Close';
-import historyServices from 'services/history.services';
+import useTranslation from 'next-translate/useTranslation';
+import numeral from 'numeral';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import { RiFilePaper2Fill } from 'react-icons/ri';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IProps {}
 
 const tableSize = 10;
 
-const UserIdContainer: React.FC<IProps> = ({}) => {
+const HistoryContainer: React.FC<IProps> = ({}) => {
   const { t } = useTranslation();
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
   const { page, setPage, total, setTotal, loading, setLoading, data, setData } =
     usePaginationHook<IUserScoreHistory>();
+  const queryClient = useQueryClient();
 
   const { watch } = useForm({
     defaultValues: {
+      searchText: '',
       startDate: '',
       endDate: '',
+      base: EUserBase[''],
     },
   });
 
-  const { data: historyData } =
-    userServices.useQueryGetUserScoreHistoriesByUserId({
-      userId: router.query.userId as string,
-      page,
-      take: tableSize,
-      startDate: watch('startDate'),
-      endDate: watch('endDate'),
-    });
+  const { data: historyData } = historyServices.useQueryGetUserScoreHistories({
+    searchText: watch('searchText'),
+    startDate: watch('startDate'),
+    endDate: watch('endDate'),
+    page,
+    take: tableSize,
+    base: watch('base'),
+  });
 
   useEffect(() => {
     if (historyData) {
@@ -69,7 +70,7 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
     historyServices.useMutationUpdateUserScoreHistoryById(
       () => {
         queryClient.invalidateQueries({
-          queryKey: ['get-user-score-histories-by-user-id'],
+          queryKey: ['get-user-score-histories'],
           refetchType: 'all',
         });
       },
@@ -200,6 +201,55 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
       width: 100,
     },
     {
+      field: 'profileImageUrl',
+      headerName: t('common:table.image'),
+      sortable: false,
+      disableColumnMenu: true,
+      width: 100,
+      headerAlign: 'center',
+      renderCell: (params) => {
+        return (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+            }}
+          >
+            <img
+              src={params.row.scoreInfo.user?.profileImageUrl}
+              alt={params.row.scoreInfo.user?.displayName}
+              style={{ width: 40, height: 40, borderRadius: 50 }}
+            />
+          </Box>
+        );
+      },
+    },
+    {
+      field: 'name',
+      headerName: t('common:table.name'),
+      sortable: false,
+      disableColumnMenu: true,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params: GridRenderCellParams<IUserScoreHistory>) => (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+          }}
+        >
+          <Typography align="center" sx={{ width: '100%' }}>
+            {`${params.row?.scoreInfo.user?.rank} ${params.row?.scoreInfo.user?.firstName} ${params.row?.scoreInfo.user?.lastName}`}
+          </Typography>
+        </Box>
+      ),
+      width: 180,
+    },
+    {
       field: 'stauts',
       headerName: t('common:table.status'),
       sortable: false,
@@ -225,7 +275,6 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
     {
       field: 'actions',
       type: 'actions',
-      flex: 1,
       getActions: (params) => [
         <GridActionsCellItem
           icon={<CheckIcon />}
@@ -258,7 +307,7 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
   return (
     <Paper sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
-        <Typography variant="h2">{t('common:user.history')}</Typography>
+        <Typography variant="h2">{t('common:user.user')}</Typography>
         <Box sx={{ flex: 1 }} />
       </Box>
       <Box sx={{ height: 110 + 52 * tableSize }}>
@@ -285,4 +334,4 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
   );
 };
 
-export default UserIdContainer;
+export default HistoryContainer;

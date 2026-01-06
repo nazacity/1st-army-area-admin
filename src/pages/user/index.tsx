@@ -2,8 +2,8 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 import { AuthGuardRedirect } from 'utils/authGuard';
 import { Box } from '@mui/material';
-import { IUser } from 'models/admin.model';
 import UserContainer from 'components/page/user/UserContainer';
+import { IUser } from 'models/user.model';
 
 interface IProps {
   user: IUser;

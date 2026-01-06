@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ResponseModel } from 'models/respone.model';
-import { IUser } from 'models/user.model';
+import { IUser, IUserScoreHistory } from 'models/user.model';
 
 import authenticatedRequest from 'utils/authenticatedRequest';
 
@@ -62,9 +62,9 @@ const userServices = {
     take: number;
   }) {
     return useQuery<
-      ResponseModel<IUser[]>,
+      ResponseModel<IUserScoreHistory[]>,
       Error,
-      ResponseModel<IUser[]>,
+      ResponseModel<IUserScoreHistory[]>,
       [
         string,
         {

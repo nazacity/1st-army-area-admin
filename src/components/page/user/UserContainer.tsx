@@ -28,7 +28,7 @@ const UserContainer: React.FC<IProps> = ({}) => {
   const queryClient = useQueryClient();
 
   const { page, setPage, total, setTotal, loading, setLoading, data, setData } =
-    usePaginationHook();
+    usePaginationHook<IUser>();
 
   const { watch } = useForm({
     defaultValues: {
