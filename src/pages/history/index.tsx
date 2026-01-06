@@ -18,8 +18,4 @@ const HistoryPage: React.FC<IProps> = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return AuthGuardRedirect(ctx);
-};
-
 export default HistoryPage;

@@ -21,8 +21,4 @@ const UserPage: React.FC<IProps> = ({ user }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return AuthGuardRedirect(ctx);
-};
-
 export default UserPage;
