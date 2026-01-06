@@ -25,7 +25,8 @@
   },
   "user": {
     "user": "ผู้ใช้งาน",
-    "history": "ประวัติบันทึกผล"
+    "history": "ประวัติบันทึกผล",
+    "search_user_placeholder": "ชื่อ นามสกุล"
   },
   "history": {
     "status": {

@@ -1,19 +1,29 @@
 import React, { useEffect } from 'react';
 import historyServices from 'services/history.services';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import usePaginationHook from 'utils/usePaginationHook';
 import {
   EUserBase,
   EUserScoreHistoryStatus,
   IUserScoreHistory,
 } from 'models/user.model';
-import { Avatar, Box, Paper, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  Paper,
+  Select,
+  Typography,
+} from '@mui/material';
 import BaseTable from 'components/basecomponents/basetable/BaseTable';
 import BasePagination from 'components/basecomponents/baspagination/BasePagination';
 import {
   GridActionsCellItem,
   GridColDef,
   GridRenderCellParams,
+  GridSearchIcon,
 } from '@mui/x-data-grid';
 import { AlertConfirm } from 'utils/Alert';
 import CheckIcon from '@mui/icons-material/Check';
@@ -24,6 +34,12 @@ import numeral from 'numeral';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { RiFilePaper2Fill } from 'react-icons/ri';
 import { useQueryClient } from '@tanstack/react-query';
+import BaseTextInput from 'components/basecomponents/baseinput/BaseTextInput';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { COLORS } from 'theme';
 
 interface IProps {}
 
@@ -35,23 +51,24 @@ const HistoryContainer: React.FC<IProps> = ({}) => {
     usePaginationHook<IUserScoreHistory>();
   const queryClient = useQueryClient();
 
-  const { watch } = useForm({
+  const { watch, control } = useForm({
     defaultValues: {
       searchText: '',
-      startDate: '',
-      endDate: '',
+      startDate: dayjs().startOf('month'),
+      endDate: dayjs().endOf('month'),
       base: EUserBase[''],
     },
   });
 
-  const { data: historyData } = historyServices.useQueryGetUserScoreHistories({
-    searchText: watch('searchText'),
-    startDate: watch('startDate'),
-    endDate: watch('endDate'),
-    page,
-    take: tableSize,
-    base: watch('base'),
-  });
+  const { data: historyData, refetch: refetchHistoryData } =
+    historyServices.useQueryGetUserScoreHistories({
+      searchText: watch('searchText'),
+      startDate: watch('startDate').toDate(),
+      endDate: watch('endDate').toDate(),
+      page,
+      take: tableSize,
+      base: watch('base'),
+    });
 
   useEffect(() => {
     if (historyData) {
@@ -310,6 +327,99 @@ const HistoryContainer: React.FC<IProps> = ({}) => {
         <Typography variant="h2">{t('common:user.user')}</Typography>
         <Box sx={{ flex: 1 }} />
       </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
+        <Controller
+          name="searchText"
+          control={control}
+          render={({ field: { value, onChange } }) => {
+            return (
+              <BaseTextInput
+                value={value}
+                onChange={onChange}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <IconButton onClick={() => refetchHistoryData()}>
+                      <GridSearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                {...(value.length > 0 && {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => {
+                          onChange('');
+                        }}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                })}
+                sx={{ width: 300 }}
+                placeholder={t('common:user.search_user_placeholder')}
+              />
+            );
+          }}
+        />
+        <Controller
+          name="startDate"
+          control={control}
+          render={({ field: { value, onChange } }) => {
+            return (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="จากวันที่"
+                  value={value}
+                  onChange={onChange}
+                  sx={{ mx: 2 }}
+                />
+              </LocalizationProvider>
+            );
+          }}
+        />
+        <Controller
+          name="endDate"
+          control={control}
+          render={({ field: { value, onChange } }) => {
+            return (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="ถึงวันที่"
+                  value={value}
+                  onChange={onChange}
+                  sx={{ mr: 2 }}
+                />
+              </LocalizationProvider>
+            );
+          }}
+        />
+        <Controller
+          control={control}
+          name="base"
+          render={({ field: { value, onChange }, formState: { errors } }) => (
+            <Select
+              value={value}
+              onChange={onChange}
+              displayEmpty
+              sx={{ bgcolor: COLORS.white }}
+              error={!!errors.base?.message}
+            >
+              <MenuItem value="">เลือกสังกัด</MenuItem>
+              {Object.values(EUserBase)
+                .filter((a) => a)
+                .map((item) => {
+                  return (
+                    <MenuItem value={item} key={item}>
+                      {item}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          )}
+        />
+      </Box>
+
       <Box sx={{ height: 110 + 52 * tableSize }}>
         <BaseTable
           rows={data}

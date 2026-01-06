@@ -18,8 +18,8 @@ const historyServices = {
     base,
   }: {
     searchText: string;
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     page: number;
     take: number;
     base: EUserBase;
@@ -32,8 +32,8 @@ const historyServices = {
         string,
         {
           searchText: string;
-          startDate: string;
-          endDate: string;
+          startDate: Date;
+          endDate: Date;
           page: number;
           take: number;
           base: EUserBase;
