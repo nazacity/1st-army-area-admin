@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import {
+  Avatar,
   Box,
   IconButton,
   InputAdornment,
@@ -26,6 +27,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { AlertConfirm } from 'utils/Alert';
 import BaseTextInput from 'components/basecomponents/baseinput/BaseTextInput';
 import CloseIcon from '@mui/icons-material/Close';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 
 interface IProps {}
 
@@ -111,12 +113,19 @@ const UserContainer: React.FC<IProps> = ({}) => {
               justifyContent: 'center',
               height: '100%',
             }}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
           >
-            <img
-              src={params.row.profileImageUrl}
-              alt={params.row.displayName}
-              style={{ width: 40, height: 40, borderRadius: 50 }}
-            />
+            <PhotoProvider>
+              <PhotoView src={params.row.profileImageUrl}>
+                <Avatar
+                  src={params.row.profileImageUrl}
+                  alt={params.row.displayName}
+                  style={{ width: 40, height: 40, borderRadius: 50 }}
+                />
+              </PhotoView>
+            </PhotoProvider>
           </Box>
         );
       },
@@ -142,7 +151,7 @@ const UserContainer: React.FC<IProps> = ({}) => {
           </Typography>
         </Box>
       ),
-      width: 180,
+      flex: 1,
     },
     {
       field: 'createdAt',
@@ -172,13 +181,6 @@ const UserContainer: React.FC<IProps> = ({}) => {
       type: 'actions',
       flex: 1,
       getActions: (params) => [
-        // <GridActionsCellItem
-        //   icon={<EditIcon />}
-        //   onClick={() => {
-        //     _HandleProductModalOpen();
-        //   }}
-        //   label="Edit"
-        // />,
         <GridActionsCellItem
           icon={<DeleteIcon />}
           onClick={async () => {
