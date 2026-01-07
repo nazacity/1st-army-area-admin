@@ -152,6 +152,7 @@ const UserContainer: React.FC<IProps> = ({}) => {
         </Box>
       ),
       flex: 1,
+      minWidth: 180,
     },
     {
       field: 'createdAt',
@@ -199,7 +200,14 @@ const UserContainer: React.FC<IProps> = ({}) => {
         <Typography variant="h2">{t('common:user.user')}</Typography>
         <Box sx={{ flex: 1 }} />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          px: { xs: 0, md: 2 },
+          py: 2,
+        }}
+      >
         <Controller
           name="searchText"
           control={control}

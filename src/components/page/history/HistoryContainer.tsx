@@ -329,7 +329,7 @@ const HistoryContainer: React.FC<IProps> = ({}) => {
         </Typography>
         <Box sx={{ flex: 1 }} />
       </Box>
-      <Box sx={{ m: { xs: 0, md: 2 } }}>
+      <Box sx={{ m: { xs: 0, md: 2 }, my: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
             <Controller
