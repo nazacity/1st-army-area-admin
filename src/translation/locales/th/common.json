@@ -29,6 +29,7 @@
     "search_user_placeholder": "ชื่อ นามสกุล"
   },
   "history": {
+    "history_title": "รายการบันทึก",
     "status": {
       "approved": "อนุมัติ",
       "pending": "รออนุมัติ",

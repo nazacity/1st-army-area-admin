@@ -10,6 +10,7 @@ import {
 import {
   Avatar,
   Box,
+  Grid,
   IconButton,
   InputAdornment,
   MenuItem,
@@ -323,102 +324,115 @@ const HistoryContainer: React.FC<IProps> = ({}) => {
   return (
     <Paper sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
-        <Typography variant="h2">{t('common:user.user')}</Typography>
+        <Typography variant="h2">
+          {t('common:history.history_title')}
+        </Typography>
         <Box sx={{ flex: 1 }} />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
-        <Controller
-          name="searchText"
-          control={control}
-          render={({ field: { value, onChange } }) => {
-            return (
-              <BaseTextInput
-                value={value}
-                onChange={onChange}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <IconButton onClick={() => refetchHistoryData()}>
-                      <GridSearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
-                {...(value.length > 0 && {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => {
-                          onChange('');
-                        }}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                })}
-                sx={{ width: 300 }}
-                placeholder={t('common:user.search_user_placeholder')}
-              />
-            );
-          }}
-        />
-        <Controller
-          name="startDate"
-          control={control}
-          render={({ field: { value, onChange } }) => {
-            return (
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="จากวันที่"
-                  value={value}
-                  onChange={onChange}
-                  sx={{ mx: 2 }}
-                />
-              </LocalizationProvider>
-            );
-          }}
-        />
-        <Controller
-          name="endDate"
-          control={control}
-          render={({ field: { value, onChange } }) => {
-            return (
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="ถึงวันที่"
-                  value={value}
-                  onChange={onChange}
-                  sx={{ mr: 2 }}
-                />
-              </LocalizationProvider>
-            );
-          }}
-        />
-        <Controller
-          control={control}
-          name="base"
-          render={({ field: { value, onChange }, formState: { errors } }) => (
-            <Select
-              value={value}
-              onChange={onChange}
-              displayEmpty
-              sx={{ bgcolor: COLORS.white }}
-              error={!!errors.base?.message}
-            >
-              <MenuItem value="">เลือกสังกัด</MenuItem>
-              {Object.values(EUserBase)
-                .filter((a) => a)
-                .map((item) => {
+      <Box sx={{ m: { xs: 0, md: 2 } }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={4}>
+            <Controller
+              name="searchText"
+              control={control}
+              render={({ field: { value, onChange } }) => {
+                return (
+                  <BaseTextInput
+                    value={value}
+                    onChange={onChange}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <IconButton onClick={() => refetchHistoryData()}>
+                          <GridSearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    {...(value.length > 0 && {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => {
+                              onChange('');
+                            }}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    })}
+                    sx={{ width: '100%' }}
+                    placeholder={t('common:user.search_user_placeholder')}
+                  />
+                );
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Controller
+                name="startDate"
+                control={control}
+                render={({ field: { value, onChange } }) => {
                   return (
-                    <MenuItem value={item} key={item}>
-                      {item}
-                    </MenuItem>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="จากวันที่"
+                        value={value}
+                        onChange={onChange}
+                        sx={{ mr: 2 }}
+                      />
+                    </LocalizationProvider>
                   );
-                })}
-            </Select>
-          )}
-        />
+                }}
+              />
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="ถึงวันที่"
+                        value={value}
+                        onChange={onChange}
+                      />
+                    </LocalizationProvider>
+                  );
+                }}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Controller
+              control={control}
+              name="base"
+              render={({
+                field: { value, onChange },
+                formState: { errors },
+              }) => (
+                <Select
+                  value={value}
+                  onChange={onChange}
+                  displayEmpty
+                  error={!!errors.base?.message}
+                  sx={{ width: '100%', bgcolor: COLORS.white }}
+                >
+                  <MenuItem value="">เลือกสังกัด</MenuItem>
+                  {Object.values(EUserBase)
+                    .filter((a) => a)
+                    .map((item) => {
+                      return (
+                        <MenuItem value={item} key={item}>
+                          {item}
+                        </MenuItem>
+                      );
+                    })}
+                </Select>
+              )}
+            />
+          </Grid>
+        </Grid>
       </Box>
-
       <Box sx={{ height: 110 + 52 * tableSize }}>
         <BaseTable
           rows={data}

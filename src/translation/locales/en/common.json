@@ -28,6 +28,7 @@
     "history": "ประวัติบันทึกผล"
   },
   "history": {
+    "history_title": "รายการบันทึก",
     "status": {
       "approved": "อนุมัติ",
       "pending": "รออนุมัติ",

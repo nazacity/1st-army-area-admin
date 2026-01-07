@@ -1,14 +1,21 @@
 import React, { useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { Box, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  Paper,
+  Typography,
+} from '@mui/material';
 import {
   GridActionsCellItem,
   GridColDef,
   GridRenderCellParams,
+  GridSearchIcon,
 } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import usePaginationHook from 'utils/usePaginationHook';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import BaseTable from 'components/basecomponents/basetable/BaseTable';
 import BasePagination from 'components/basecomponents/baspagination/BasePagination';
 import userServices from 'services/user.services';
@@ -17,6 +24,8 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
 import { AlertConfirm } from 'utils/Alert';
+import BaseTextInput from 'components/basecomponents/baseinput/BaseTextInput';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface IProps {}
 
@@ -30,17 +39,18 @@ const UserContainer: React.FC<IProps> = ({}) => {
   const { page, setPage, total, setTotal, loading, setLoading, data, setData } =
     usePaginationHook<IUser>();
 
-  const { watch } = useForm({
+  const { watch, control } = useForm({
     defaultValues: {
       searchText: '',
     },
   });
 
-  const { data: userData } = userServices.useQueryGetUsers({
-    searchText: watch('searchText'),
-    page,
-    take: tableSize,
-  });
+  const { data: userData, refetch: refetchUserData } =
+    userServices.useQueryGetUsers({
+      searchText: watch('searchText'),
+      page,
+      take: tableSize,
+    });
 
   useEffect(() => {
     if (userData) {
@@ -186,6 +196,42 @@ const UserContainer: React.FC<IProps> = ({}) => {
       <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
         <Typography variant="h2">{t('common:user.user')}</Typography>
         <Box sx={{ flex: 1 }} />
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
+        <Controller
+          name="searchText"
+          control={control}
+          render={({ field: { value, onChange } }) => {
+            return (
+              <BaseTextInput
+                value={value}
+                onChange={onChange}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <IconButton onClick={() => refetchUserData()}>
+                      <GridSearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                {...(value.length > 0 && {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => {
+                          onChange('');
+                        }}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                })}
+                sx={{ width: '100%' }}
+                placeholder={t('common:user.search_user_placeholder')}
+              />
+            );
+          }}
+        />
       </Box>
       <Box sx={{ height: 110 + 52 * tableSize }}>
         <BaseTable
