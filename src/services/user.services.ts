@@ -56,8 +56,8 @@ const userServices = {
     take,
   }: {
     userId: string;
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     page: number;
     take: number;
   }) {
@@ -69,8 +69,8 @@ const userServices = {
         string,
         {
           userId: string;
-          startDate: string;
-          endDate: string;
+          startDate: Date;
+          endDate: Date;
           page: number;
           take: number;
         },

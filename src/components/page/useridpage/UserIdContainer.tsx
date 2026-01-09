@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import userServices from 'services/user.services';
 import { useRouter } from 'next/router';
 import usePaginationHook from 'utils/usePaginationHook';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Avatar, Box, Paper, Typography } from '@mui/material';
 import BaseTable from 'components/basecomponents/basetable/BaseTable';
 import BasePagination from 'components/basecomponents/baspagination/BasePagination';
@@ -22,10 +22,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import historyServices from 'services/history.services';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 interface IProps {}
 
-const tableSize = 30;
+const tableSize = 15;
 
 const UserIdContainer: React.FC<IProps> = ({}) => {
   const { t } = useTranslation();
@@ -35,10 +38,10 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
   const { page, setPage, total, setTotal, loading, setLoading, data, setData } =
     usePaginationHook<IUserScoreHistory>();
 
-  const { watch } = useForm({
+  const { watch, control } = useForm({
     defaultValues: {
-      startDate: '',
-      endDate: '',
+      startDate: dayjs().startOf('month'),
+      endDate: dayjs().endOf('month'),
     },
   });
 
@@ -47,8 +50,8 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
       userId: router.query.userId as string,
       page,
       take: tableSize,
-      startDate: watch('startDate'),
-      endDate: watch('endDate'),
+      startDate: watch('startDate').toDate(),
+      endDate: watch('endDate').toDate(),
     });
 
   useEffect(() => {
@@ -259,6 +262,47 @@ const UserIdContainer: React.FC<IProps> = ({}) => {
       <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
         <Typography variant="h2">{t('common:user.history')}</Typography>
         <Box sx={{ flex: 1 }} />
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          m: { xs: 0, md: 2 },
+          my: 2,
+        }}
+      >
+        <Controller
+          name="startDate"
+          control={control}
+          render={({ field: { value, onChange } }) => {
+            return (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="จากวันที่"
+                  value={value}
+                  onChange={onChange}
+                  sx={{ mr: 2 }}
+                />
+              </LocalizationProvider>
+            );
+          }}
+        />
+        <Controller
+          name="endDate"
+          control={control}
+          render={({ field: { value, onChange } }) => {
+            return (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="ถึงวันที่"
+                  value={value}
+                  onChange={onChange}
+                  sx={{}}
+                />
+              </LocalizationProvider>
+            );
+          }}
+        />
       </Box>
       <Box sx={{ height: 110 + 52 * tableSize }}>
         <BaseTable
