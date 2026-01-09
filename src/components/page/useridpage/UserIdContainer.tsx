@@ -25,7 +25,7 @@ import historyServices from 'services/history.services';
 
 interface IProps {}
 
-const tableSize = 10;
+const tableSize = 30;
 
 const UserIdContainer: React.FC<IProps> = ({}) => {
   const { t } = useTranslation();

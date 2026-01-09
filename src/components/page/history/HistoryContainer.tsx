@@ -43,7 +43,7 @@ import { COLORS } from 'theme';
 
 interface IProps {}
 
-const tableSize = 10;
+const tableSize = 30;
 
 const HistoryContainer: React.FC<IProps> = ({}) => {
   const { t } = useTranslation();

@@ -31,7 +31,7 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 
 interface IProps {}
 
-const tableSize = 10;
+const tableSize = 30;
 
 const UserContainer: React.FC<IProps> = ({}) => {
   const { t } = useTranslation();
